@@ -17,6 +17,8 @@ module JsonDef
       value.kind_of?(Numeric)
     when :string
       value.kind_of?(String)
+    when :array
+      value.kind_of?(Array)
     when :wildcard
       # Land of satisfaction.
       true
