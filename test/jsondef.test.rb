@@ -88,4 +88,25 @@ class TestJsondef < Test::Unit::TestCase
     end
   end
 
+  def test_nested_rule
+    j = JSON.parse('{"foo": {"bar": {"baz": 123}}}')
+    {:number => true, :string => false, :object => false, :array => false}.each do |type, expected|
+      rule = JsonRuleObject
+        .new
+        .set_strict
+        .add_key_rule(JsonRuleObjectKey
+          .new('foo')
+          .set_value_rule(JsonRuleObject
+            .new
+            .add_key_rule(JsonRuleObjectKey
+              .new('bar')
+              .set_value_rule(JsonRuleObject
+                .new
+                .add_key_rule(JsonRuleObjectKey
+                  .new('baz')
+                  .set_value_type(type))))))
+      assert_equal(expected, JsonDef.verify(j, rule))
+    end
+  end
+
 end
