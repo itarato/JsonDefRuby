@@ -1,5 +1,3 @@
-require 'json'
-
 module JsonDef
 
   def JsonDef.verify(obj, rule)
@@ -41,6 +39,9 @@ module JsonDef
       when key_rule.value.kind_of?(JsonRuleObject)
         return false unless JsonDef.verify_object(obj[key_rule.key], key_rule.value)
 
+      when key_rule.value.kind_of?(JsonRuleArray)
+        return false unless JsonDef.verify_array(obj[key_rule.key], key_rule.value)
+
       else
         # Expected an exact value given.
         return false unless obj[key_rule.key] == key_rule.value
@@ -52,6 +53,11 @@ module JsonDef
       obj.each { |k, v| return false unless rule.keys.member?(k) }
     end
 
+    true
+  end
+
+  def JsonDef.verify_array(obj, rule)
+    return false if obj.kind_of?(Array)
     true
   end
 
@@ -84,6 +90,13 @@ class JsonRuleObject
 
 end
 
+class JsonRuleArray
+
+  def initialize
+  end
+
+end
+
 class JsonRuleObjectKey
 
   attr_reader :required, :key, :value
@@ -109,20 +122,4 @@ class JsonRuleObjectKey
     self
   end
 
-end
-
-obj_rule = JsonRuleObject.new
-  .set_strict
-  .add_key_rule(JsonRuleObjectKey.new('foo').set_value_type(:string))
-
-[
-  '{"foo": "bar"}',
-  '{"foo": "bar", "baz": 12}',
-  '["foo", "bar"]',
-  '{}',
-  '{"bar": "foo"}',
-  '{"foo": 12}'
-].each do |raw|
-  json_obj = JSON.parse(raw);
-  p json_obj, JsonDef.verify(json_obj, obj_rule)
 end
