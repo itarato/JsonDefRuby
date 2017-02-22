@@ -1,30 +1,29 @@
 module JsonDef
 
   def JsonDef.verify(obj, rule)
-    case rule.class.to_s
-    when 'JsonRuleObject'
+    case rule.class
+    when JsonRuleObject
       JsonDef.verify_object(obj, rule)
+
+    when JsonRuleArray
+      JsonDef.verify_array(obj, rule)
+
+    when JsonRuleString
+      JsonDef.verify_string(obj, rule)
+
     else
       raise 'Unknown rule at [verify] level'
     end
   end
 
-  def JsonDef.verify_value_type(value, type)
-    case type
-    when :object
-      value.kind_of?(Hash)
-    when :number
-      value.kind_of?(Numeric)
-    when :string
-      value.kind_of?(String)
-    when :array
-      value.kind_of?(Array)
-    when :wildcard
-      # Land of satisfaction.
-      true
-    else
-      raise 'Unknown value type declaration'
-    end
+  def JsonDef.verify_string(obj, rule)
+    return false unless obj.class == String
+    true
+  end
+
+  def JsonDef.verify_number(obj, rule)
+    return false unless obj.class == Numeric
+    true
   end
 
   def JsonDef.verify_object(obj, rule)
@@ -67,20 +66,16 @@ end
 
 class JsonRuleObject
 
-  attr_reader :key_rules, :keys
+  attr_reader :key_rules, :keys, :allow_other_keys
 
   def initialize()
-    @strict = false
+    @allow_other_keys = true
     @key_rules = []
     @keys = []
   end
 
-  def strict?
-    @strict
-  end
-
-  def set_strict
-    @strict = true
+  def disallow_other_keys
+    @allow_other_keys = false
     self
   end
 
@@ -92,14 +87,9 @@ class JsonRuleObject
 
 end
 
-class JsonRuleArray
-
-  def initialize
-  end
-
-end
-
 class JsonRuleObjectKey
+
+  ANY_TYPE = :wildcard
 
   attr_reader :required, :key, :value
 
@@ -109,13 +99,8 @@ class JsonRuleObjectKey
     @value = :wildcard
   end
 
-  def set_optional()
+  def set_optional
     @required = false
-    self
-  end
-
-  def set_value_type(type)
-    @value = type
     self
   end
 
@@ -124,4 +109,13 @@ class JsonRuleObjectKey
     self
   end
 
+end
+
+class JsonRuleArray
+end
+
+class JsonRuleNumber
+end
+
+class JsonRuleString
 end

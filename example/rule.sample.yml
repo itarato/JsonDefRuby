@@ -1,0 +1,5 @@
+rule:
+  type: object
+  strict: true
+  keys:
+    foo:
