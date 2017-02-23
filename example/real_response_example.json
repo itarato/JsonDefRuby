@@ -1,0 +1,7 @@
+{
+  "status": "ok",
+  "result": {
+    "count": 2,
+    "items": ["Steve", "Gibson"]
+  }
+}

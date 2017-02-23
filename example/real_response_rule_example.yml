@@ -1,0 +1,20 @@
+rule:
+  type: object
+  disallow_other_keys: true
+  keys:
+    status:
+      rule:
+        type: string
+    result:
+      optional: true
+      rule:
+        type: object
+        disallow_other_keys: true
+        keys:
+          count:
+            rule:
+              type: number
+          items:
+            optional: true
+            rule:
+              type: array
