@@ -6,3 +6,10 @@ rule:
       optional: true
       rule:
         type: number
+    bar:
+      rule:
+        type: object
+        keys:
+          baz:
+            rule:
+              type: string
