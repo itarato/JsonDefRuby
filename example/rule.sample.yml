@@ -2,6 +2,7 @@ rule:
   type: object
   disallow_other_keys: true
   keys:
+    status: {}
     foo:
       optional: true
       rule:

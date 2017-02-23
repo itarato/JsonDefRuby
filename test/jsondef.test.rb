@@ -4,10 +4,10 @@ require_relative '../lib/jsondef.rb'
 
 class TestJsondef < Test::Unit::TestCase
 
-  def test_object_strict_on
+  def test_object_disallow_other_keys
     rule = JsonRuleObject
       .new
-      .set_strict
+      .disallow_other_keys
       .add_key_rule(JsonRuleObjectKey.new('foo'))
     {
       '{"foo": 1}' => true,
@@ -24,7 +24,7 @@ class TestJsondef < Test::Unit::TestCase
     end
   end
 
-  def test_object_strict_off
+  def test_object_allow_other_keys
     rule = JsonRuleObject
       .new
       .add_key_rule(JsonRuleObjectKey.new('foo'))
@@ -43,7 +43,7 @@ class TestJsondef < Test::Unit::TestCase
     end
   end
 
-  def test_object_optional_key
+  def test_object_key_is_optional
     rule = JsonRuleObject
       .new
       .add_key_rule(JsonRuleObjectKey.new('foo').set_optional)
@@ -63,48 +63,53 @@ class TestJsondef < Test::Unit::TestCase
   end
 
   def test_object_key_value_type
-    all_types = [:number, :string, :array, :object]
+    all_types = [JsonRuleObject, JsonRuleArray, JsonRuleNumber, JsonRuleString]
     {
-      '{"foo": 123}' => :number,
-      '{"foo": "bar"}' => :string,
-      '{"foo": []}' => :array,
-      '{"foo": [1, 2, 3]}' => :array,
-      '{"foo": {}}' => :object,
-      '{"foo": {"bar": 123}}' => :object,
+      '{"foo": 123}' => JsonRuleNumber,
+      '{"foo": "bar"}' => JsonRuleString,
+      '{"foo": []}' => JsonRuleArray,
+      '{"foo": [1, 2, 3]}' => JsonRuleArray,
+      '{"foo": {}}' => JsonRuleObject,
+      '{"foo": {"bar": 123}}' => JsonRuleObject,
     }.each do |raw, expected_type|
       j = JSON.parse(raw)
       rule = JsonRuleObject
         .new
-        .add_key_rule(JsonRuleObjectKey.new('foo').set_value_type(expected_type))
+        .add_key_rule(JsonRuleObjectKey.new('foo').set_rule(expected_type.new))
       assert(JsonDef.verify(j, rule))
 
       all_types.each do |type|
         next if type == expected_type
         anti_rule = JsonRuleObject
           .new
-          .add_key_rule(JsonRuleObjectKey.new('foo').set_value_type(type))
-        assert(!JsonDef.verify(j, anti_rule))
+          .add_key_rule(JsonRuleObjectKey.new('foo').set_rule(type.new))
+        assert(!JsonDef.verify(j, anti_rule), "Expect #{j} to fail for #{type}")
       end
     end
   end
 
   def test_nested_rule
     j = JSON.parse('{"foo": {"bar": {"baz": 123}}}')
-    {:number => true, :string => false, :object => false, :array => false}.each do |type, expected|
+    {
+      JsonRuleNumber => true,
+      JsonRuleString => false,
+      JsonRuleObject => false,
+      JsonRuleArray => false
+    }.each do |type, expected|
       rule = JsonRuleObject
         .new
-        .set_strict
+        .disallow_other_keys
         .add_key_rule(JsonRuleObjectKey
           .new('foo')
-          .set_value_rule(JsonRuleObject
+          .set_rule(JsonRuleObject
             .new
             .add_key_rule(JsonRuleObjectKey
               .new('bar')
-              .set_value_rule(JsonRuleObject
+              .set_rule(JsonRuleObject
                 .new
                 .add_key_rule(JsonRuleObjectKey
                   .new('baz')
-                  .set_value_type(type))))))
+                  .set_rule(type.new))))))
       assert_equal(expected, JsonDef.verify(j, rule))
     end
   end

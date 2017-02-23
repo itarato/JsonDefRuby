@@ -53,7 +53,7 @@ module JsonDef
   end
 
   def JsonDef.verify_array(obj, rule)
-    return false if obj.kind_of?(Array)
+    return false unless obj.kind_of?(Array)
     true
   end
 
