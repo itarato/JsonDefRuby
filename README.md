@@ -10,6 +10,21 @@ In heavy development.
 - Ruby >=2.x
 
 
+# Install
+
+You can follow the gem addition on https://rubygems.org/gems/jsondef or just:
+
+```bash
+gem install jsondef
+```
+
+And in code:
+
+```ruby
+require 'jsondef'
+```
+
+
 # Usage
 
 Let's say you have an API returning a JSON response like this:
