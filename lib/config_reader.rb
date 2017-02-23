@@ -28,8 +28,12 @@ class ConfigReader
       parse_string(conf)
     when 'number'
       parse_number(conf)
+    when 'boolean'
+      parse_boolean(conf)
+    when 'nullval'
+      parse_null(conf)
     else
-      raise "Unknown rule type: " + conf['type']
+      raise "Unknown rule type: #{conf['type']}"
     end
   end
 
@@ -61,6 +65,15 @@ class ConfigReader
   def parse_number(conf)
     rule = JsonRuleNumber.new
     rule
+  end
+
+  def parse_boolean(conf)
+    rule = JsonRuleBoolean.new
+    rule
+  end
+
+  def parse_null(conf)
+    JsonRuleNull.new
   end
 
 end

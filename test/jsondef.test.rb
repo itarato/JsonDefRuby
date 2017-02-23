@@ -12,7 +12,9 @@ class TestJsondef < Test::Unit::TestCase
     {
       '{"foo": 1}' => true,
       '{"foo": "bar"}' => true,
-      '{"foo": ""}' => true,
+      '{"foo": null}' => true,
+      '{"foo": false}' => true,
+      '{"foo": true}' => true,
       '{"foo": [1, 2, 3]}' => true,
       '{"foo": {"bar": 1}}' => true,
       '{"foo": 0, "bar": 1}' => false,
@@ -50,7 +52,7 @@ class TestJsondef < Test::Unit::TestCase
     {
       '{"foo": 1}' => true,
       '{"foo": "bar"}' => true,
-      '{"foo": ""}' => true,
+      '{"foo": null}' => true,
       '{"foo": [1, 2, 3]}' => true,
       '{"foo": {"bar": 1}}' => true,
       '{"foo": 0, "bar": 1}' => true,
@@ -63,7 +65,7 @@ class TestJsondef < Test::Unit::TestCase
   end
 
   def test_object_key_value_type
-    all_types = [JsonRuleObject, JsonRuleArray, JsonRuleNumber, JsonRuleString]
+    all_types = [JsonRuleObject, JsonRuleArray, JsonRuleNumber, JsonRuleString, JsonRuleBoolean, JsonRuleNull]
     {
       '{"foo": 123}' => JsonRuleNumber,
       '{"foo": "bar"}' => JsonRuleString,
@@ -71,6 +73,9 @@ class TestJsondef < Test::Unit::TestCase
       '{"foo": [1, 2, 3]}' => JsonRuleArray,
       '{"foo": {}}' => JsonRuleObject,
       '{"foo": {"bar": 123}}' => JsonRuleObject,
+      '{"foo": null}' => JsonRuleNull,
+      '{"foo": true}' => JsonRuleBoolean,
+      '{"foo": false}' => JsonRuleBoolean,
     }.each do |raw, expected_type|
       j = JSON.parse(raw)
       rule = JsonRuleObject
@@ -94,7 +99,9 @@ class TestJsondef < Test::Unit::TestCase
       JsonRuleNumber => true,
       JsonRuleString => false,
       JsonRuleObject => false,
-      JsonRuleArray => false
+      JsonRuleArray => false,
+      JsonRuleBoolean => false,
+      JsonRuleNull => false,
     }.each do |type, expected|
       rule = JsonRuleObject
         .new

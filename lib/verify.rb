@@ -14,6 +14,10 @@ module JsonDef
       JsonDef.verify_string(obj, rule)
     when 'JsonRuleNumber'
       JsonDef.verify_number(obj, rule)
+    when 'JsonRuleBoolean'
+      JsonDef.verify_bool(obj, rule)
+    when 'JsonRuleNull'
+      JsonDef.verify_null(obj, rule)
     else
       raise "Unknown rule at [verify] level: #{rule.class}"
     end
@@ -27,6 +31,14 @@ module JsonDef
   def JsonDef.verify_number(obj, rule)
     return false unless obj.kind_of?(Numeric)
     true
+  end
+
+  def JsonDef.verify_bool(obj, rule)
+    obj == true || obj == false
+  end
+
+  def JsonDef.verify_null(obj, rule)
+    obj == nil
   end
 
   def JsonDef.verify_object(obj, rule)

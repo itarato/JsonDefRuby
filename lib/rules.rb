@@ -35,6 +35,7 @@ class JsonRuleObjectKey
     @value = JsonDef::ANY_TYPE
   end
 
+  # @todo rename it to optional! - might be more ruby-ist
   def set_optional
     @required = false
     self
@@ -48,10 +49,43 @@ class JsonRuleObjectKey
 end
 
 class JsonRuleArray < JsonRuleBase
+
+  def initialize
+  end
+
 end
 
-class JsonRuleNumber < JsonRuleBase
+class JsonRuleSingleValue < JsonRuleBase
+
+  def initialize
+  end
+
 end
 
-class JsonRuleString < JsonRuleBase
+class JsonRuleNumber < JsonRuleSingleValue
+
+  def initialize
+  end
+
+end
+
+class JsonRuleString < JsonRuleSingleValue
+
+  def initialize
+  end
+
+end
+
+class JsonRuleNull < JsonRuleSingleValue
+
+  def initialize
+  end
+
+end
+
+class JsonRuleBoolean < JsonRuleSingleValue
+
+  def initialize
+  end
+
 end

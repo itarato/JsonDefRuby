@@ -3,6 +3,9 @@ rule:
   disallow_other_keys: true
   keys:
     status: {}
+    error:
+      rule:
+        type: nullval
     foo:
       optional: true
       rule:
@@ -14,3 +17,6 @@ rule:
           baz:
             rule:
               type: string
+          isok:
+            rule:
+              type: boolean

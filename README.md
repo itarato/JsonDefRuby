@@ -115,6 +115,20 @@ rule:
   type: number
 ```
 
+For boolean values:
+
+```yaml
+rule:
+  type: boolean
+```
+
+For null value:
+
+```yaml
+rule:
+  type: nullval # Due to null being a yaml keyword
+```
+
 
 # What is missing?
 
