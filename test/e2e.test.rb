@@ -1,6 +1,5 @@
 require 'test/unit'
 require 'json'
-require_relative '../lib/config_reader.rb'
 require_relative '../lib/jsondef.rb'
 
 class TestEnd2End < Test::Unit::TestCase
@@ -11,7 +10,7 @@ class TestEnd2End < Test::Unit::TestCase
       'real_response_example.json' => 'real_response_rule_example.yml'
     }.each do |json_file, rule_file|
       j = JSON.parse(IO.read(__dir__ + '/../example/' + json_file))
-      c = ConfigReaderFactory.fromJsonFile(__dir__ + '/../example/' + rule_file)
+      c = ConfigReaderFactory.fromYamlFile(__dir__ + '/../example/' + rule_file)
       assert(JsonDef.verify(j, c.rule))
     end
   end

@@ -73,7 +73,7 @@ require 'jsondef'
 # Gather the REST response and convert raw JSON string to Ruby object
 response_object = JSON.parse(my_rest_json_response)
 # Initialize the descriptor from the YAML file
-json_config = ConfigReaderFactory.fromJsonFile('path/to/rule/file.yml')
+json_config = ConfigReaderFactory.fromYamlFile('path/to/rule/file.yml')
 
 # Verify
 assert(JsonDef.verify(response_object, json_config.rule))

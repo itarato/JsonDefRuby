@@ -4,7 +4,7 @@ require_relative 'jsondef.rb'
 
 module ConfigReaderFactory
 
-  def ConfigReaderFactory.fromJsonFile(path)
+  def ConfigReaderFactory.fromYamlFile(path)
     ConfigReader.new(YAML.load(IO.read(path)))
   end
 
