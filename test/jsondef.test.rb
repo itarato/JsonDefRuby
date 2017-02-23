@@ -1,6 +1,6 @@
-require_relative '../lib/jsondef'
 require 'test/unit'
 require 'json'
+require_relative '../lib/jsondef.rb'
 
 class TestJsondef < Test::Unit::TestCase
 

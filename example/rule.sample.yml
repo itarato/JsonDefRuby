@@ -1,5 +1,8 @@
 rule:
   type: object
-  strict: true
+  disallow_other_keys: true
   keys:
     foo:
+      optional: true
+      rule:
+        type: number
