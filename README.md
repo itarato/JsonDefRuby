@@ -3,6 +3,9 @@ JSON Definition Library (for Ruby 2.x)
 
 [![Build Status](https://travis-ci.org/itarato/JsonDefRuby.svg?branch=master)](https://travis-ci.org/itarato/JsonDefRuby)
 
+[![Gem Version](https://badge.fury.io/rb/jsondef.svg)](https://badge.fury.io/rb/jsondef)
+
+
 This is a learning project to get into Ruby and Gems.
 
 In heavy development.
