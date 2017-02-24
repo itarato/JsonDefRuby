@@ -99,6 +99,10 @@ For arrays:
 ```yaml
 rule:
   type: array # Array type
+  min: <number> # (Optional) The minimum required elements in the array (inclusive)
+  max: <number> # (Optional) The maximum required elements in the array (inclusive)
+  rule: # (Optional) Rule applied on all elements
+    ...
 ```
 
 For strings:
@@ -106,6 +110,7 @@ For strings:
 ```yaml
 rule:
   type: string
+  value: <string> # (Optional) Exact value to match against
 ```
 
 For numbers:
@@ -113,6 +118,7 @@ For numbers:
 ```yaml
 rule:
   type: number
+  value: <string> # (Optional) Exact value to match against
 ```
 
 For boolean values:
@@ -120,6 +126,7 @@ For boolean values:
 ```yaml
 rule:
   type: boolean
+  value: <string> # (Optional) Exact value to match against
 ```
 
 For null value:
@@ -135,6 +142,5 @@ rule:
 This is a development project, and unless it gains some interest it will remain so.
 
 Nevertheless I plan to add:
-- null and boolean type validation
-- array type rules, such as element type, ...
 - string and number constraints
+- add validation error messages

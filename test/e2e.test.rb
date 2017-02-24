@@ -11,7 +11,7 @@ class TestEnd2End < Test::Unit::TestCase
     }.each do |json_file, rule_file|
       j = JSON.parse(IO.read(__dir__ + '/../example/' + json_file))
       c = ConfigReaderFactory.fromYamlFile(__dir__ + '/../example/' + rule_file)
-      assert(JsonDef.verify(j, c.rule))
+      assert(JsonDef.verify(j, c.rule), "File #{json_file} satisfies rule file #{rule_file}")
     end
   end
 

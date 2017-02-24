@@ -27,12 +27,12 @@ end
 
 class JsonRuleObjectKey
 
-  attr_reader :required, :key, :value
+  attr_reader :required, :key, :rule
 
   def initialize(key)
     @key = key
     @required = true
-    @value = JsonDef::ANY_TYPE
+    @rule = JsonDef::ANY_TYPE
   end
 
   # @todo rename it to optional! - might be more ruby-ist
@@ -42,7 +42,7 @@ class JsonRuleObjectKey
   end
 
   def set_rule(rule)
-    @value = rule
+    @rule = rule
     self
   end
 
@@ -50,42 +50,50 @@ end
 
 class JsonRuleArray < JsonRuleBase
 
+  attr_reader :min_count, :max_count, :unified_rule
+
   def initialize
+    @min_count = 0
+    @max_count = -1
+    @unified_rule = nil
+  end
+
+  def set_rule(rule)
+    @unified_rule = rule
+    self
+  end
+
+  def set_count(min = nil, max = nil)
+    @min_count = min unless min == nil
+    @max_count = max unless max == nil
+    self
   end
 
 end
 
 class JsonRuleSingleValue < JsonRuleBase
 
-  def initialize
+  attr_reader :value
+
+  def initialize(value = JsonDef::ANY_VALUE)
+    @value = value
   end
 
 end
 
 class JsonRuleNumber < JsonRuleSingleValue
-
-  def initialize
-  end
-
 end
 
 class JsonRuleString < JsonRuleSingleValue
+end
 
-  def initialize
-  end
-
+class JsonRuleBoolean < JsonRuleSingleValue
 end
 
 class JsonRuleNull < JsonRuleSingleValue
 
   def initialize
-  end
-
-end
-
-class JsonRuleBoolean < JsonRuleSingleValue
-
-  def initialize
+    super(nil)
   end
 
 end

@@ -54,26 +54,38 @@ class ConfigReader
 
   def parse_array(conf)
     rule = JsonRuleArray.new
+    min_val = if conf.has_key?('min') then conf['min'] else nil end
+    max_val = if conf.has_key?('max') then conf['max'] else nil end
+    rule.set_count(min_val, max_val)
+    rule.set_rule(parse_element(conf['rule'])) if conf.has_key?('rule')
     rule
   end
 
   def parse_string(conf)
-    rule = JsonRuleString.new
+    rule = JsonRuleString.new(extract_exact_value(conf))
     rule
   end
 
   def parse_number(conf)
-    rule = JsonRuleNumber.new
+    rule = JsonRuleNumber.new(extract_exact_value(conf))
     rule
   end
 
   def parse_boolean(conf)
-    rule = JsonRuleBoolean.new
+    rule = JsonRuleBoolean.new(extract_exact_value(conf))
     rule
   end
 
   def parse_null(conf)
     JsonRuleNull.new
+  end
+
+  def extract_exact_value(conf)
+    if conf.has_key?('value')
+      conf['value']
+    else
+      JsonDef::ANY_VALUE
+    end
   end
 
 end
