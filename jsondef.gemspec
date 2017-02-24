@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'jsondef'
-  s.version     = '0.1.1'
+  s.version     = '0.1.2'
   s.date        = '2017-02-23'
   s.summary     = "JSON definition and verification lib."
   s.description = "Can create JSON descriptor and verify if a given object satisfy it."
